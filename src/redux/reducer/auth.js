@@ -61,5 +61,8 @@ export const loginUser = (token) => ({
 export const logoutUser = () => ({
   type: LOGOUT_USER,
 });
+export const getToken = () => {
+  return localStorage.getItem('token'); 
+};
 
 export default authReducer;

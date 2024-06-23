@@ -104,7 +104,7 @@ router.get('/categories', async (req, res) => {
 router.get('/category/:category', async (req, res) => {
     const category = req.params.category;
     const limit = Number(req.query.limit) || 0;
-    const sort = req.query.sort == 'desc' ? -1 : 1;
+    const sort = req.query.sort === 'desc' ? -1 : 1;
 
     try {
         const products = await Product.find({ category })

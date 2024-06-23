@@ -43,7 +43,12 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // Add an item to the cart
 router.post('/', authMiddleware, async (req, res) => {
-    const { productId, quantity } = req.body;
+    const { productId, quantity } = req.body;;
+
+    // Validasi input
+    if (!productId || !quantity) {
+        return res.status(400).send({ message: 'ProductId and quantity are required' });
+    }
 
     try {
         let cart = await Cart.findOne({ userId: req.user._id });
@@ -67,7 +72,8 @@ router.post('/', authMiddleware, async (req, res) => {
         await cart.save();
         res.status(201).send(cart);
     } catch (error) {
-        res.status(400).send("erorrrrrr"+ error);
+        console.error('Error adding to cart:', error);
+        res.status(500).send({ message: 'Internal server error' });
     }
 });
 

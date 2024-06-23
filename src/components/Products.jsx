@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { addCart } from "../redux/action";
-
+import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useDispatch } from "react-redux";
+import { addCart } from "../redux/action";
 
 import { Link } from "react-router-dom";
 
@@ -13,11 +13,6 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
 
-  const dispatch = useDispatch();
-  
-  const addProduct = (product) => {
-    dispatch(addCart(product));
-  };
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
@@ -36,6 +31,12 @@ const Products = () => {
 
     getProducts();
   }, []);
+
+   const dispatch = useDispatch();
+
+  const addProduct = async (product) => {
+   dispatch(addCart(product));
+  };
 
   const Loading = () => {
     return (
@@ -112,7 +113,7 @@ const Products = () => {
                   <Link to={"/product/" + product._id} className="btn btn-dark m-1">
                     Buy Now
                   </Link>
-                  <button className="btn btn-dark m-1"   onClick={(e) => addProduct(product)}>
+                  <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
                     Add to Cart
                   </button>
                 </div>

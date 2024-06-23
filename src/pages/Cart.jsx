@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector, useDispatch } from "react-redux";
-import { addCart, delCart } from "../redux/action";
+import { getCart, addCart, delCart, updateCart } from "../redux/action";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
   const state = useSelector((state) => state.handleCart);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch]);
 
   const EmptyCart = () => {
     return (
@@ -26,8 +30,13 @@ const Cart = () => {
   const addItem = (product) => {
     dispatch(addCart(product));
   };
+
   const removeItem = (product) => {
-    dispatch(delCart(product));
+    dispatch(updateCart(product.productId._id, product.quantity - 1));
+  };
+
+  const deleteItem = (productId) => {
+    dispatch(delCart(productId));
   };
 
   const ShowCart = () => {
@@ -35,11 +44,11 @@ const Cart = () => {
     let shipping = 30.0;
     let totalItems = 0;
     state.map((item) => {
-      return (subtotal += item.price * item.qty);
+      return (subtotal += item.productId.price * item.quantity);
     });
 
     state.map((item) => {
-      return (totalItems += item.qty);
+      return (totalItems += item.quantity);
     });
     return (
       <>
@@ -54,7 +63,7 @@ const Cart = () => {
                   <div className="card-body">
                     {state.map((item) => {
                       return (
-                        <div key={item.id}>
+                        <div key={item._id}>
                           <div className="row d-flex align-items-center">
                             <div className="col-lg-3 col-md-12">
                               <div
@@ -62,8 +71,8 @@ const Cart = () => {
                                 data-mdb-ripple-color="light"
                               >
                                 <img
-                                  src={item.image}
-                                  alt={item.title}
+                                  src={item.productId.image}
+                                  alt={item.productId.title}
                                   width={100}
                                   height={75}
                                 />
@@ -72,10 +81,8 @@ const Cart = () => {
 
                             <div className="col-lg-5 col-md-6">
                               <p>
-                                <strong>{item.title}</strong>
+                                <strong>{item.productId.title}</strong>
                               </p>
-                              {/* <p>Color: blue</p>
-                              <p>Size: M</p> */}
                             </div>
 
                             <div className="col-lg-4 col-md-6">
@@ -92,22 +99,33 @@ const Cart = () => {
                                   <i className="fas fa-minus"></i>
                                 </button>
 
-                                <p className="mx-5">{item.qty}</p>
+                                <p className="mx-5">{item.quantity}</p>
 
                                 <button
                                   className="btn px-3"
                                   onClick={() => {
-                                    addItem(item);
+                                    addItem(item.productId);
                                   }}
                                 >
                                   <i className="fas fa-plus"></i>
                                 </button>
                               </div>
 
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => {
+                                  deleteItem(item.productId._id);
+                                }}
+                              >
+                                <i className="fas fa-trash"></i>
+                              </button>
+
                               <p className="text-start text-md-center">
                                 <strong>
-                                  <span className="text-muted">{item.qty}</span>{" "}
-                                  x ${item.price}
+                                  <span className="text-muted">
+                                    {item.quantity}
+                                  </span>{" "}
+                                  x ${item.productId.price}
                                 </strong>
                               </p>
                             </div>
