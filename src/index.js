@@ -5,8 +5,10 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register, Checkout, PageNotFound } from "./pages"
-import Admin from './pages/Admin';
+import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register, Checkout, PageNotFound } from "./pages";
+import AdminLayout from './components/admin/AdminLayout';
+import ManageProducts from "./pages/Admin/ManageProduct"
+import ManageOrders from './pages/Admin/ManageOrder';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -25,7 +27,10 @@ root.render(
         <Route path="*" element={<PageNotFound />} />
         <Route path="/product/*" element={<PageNotFound />} />
 
-        <Route path="/admin" element={<Admin/>}/>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="products" element={<ManageProducts />} />
+          <Route path="orders" element={<ManageOrders />} />
+        </Route>
       </Routes>
     </Provider>
   </BrowserRouter>

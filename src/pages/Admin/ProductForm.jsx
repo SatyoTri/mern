@@ -8,6 +8,7 @@ const ProductForm = ({ show, handleClose, editProduct, onSuccess }) => {
     price: '',
     description: '',
     category: '',
+    sizes: '',
     image: null,
   });
 
@@ -102,6 +103,15 @@ const ProductForm = ({ show, handleClose, editProduct, onSuccess }) => {
               type="text"
               name="category"
               value={formData.category}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group><Form.Group controlId="formCategory">
+            <Form.Label>Sizes</Form.Label>
+            <Form.Control
+              type="text"
+              name="sizes"
+              value={formData.sizes}
               onChange={handleChange}
               required
             />

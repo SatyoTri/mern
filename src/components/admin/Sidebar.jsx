@@ -11,17 +11,11 @@ const Sidebar = () => {
         <NavLink to="/admin" className="nav-link">
           Dashboard
         </NavLink>
-        <NavLink to="/" className="nav-link">
-          addProduct
+        <NavLink to="products" className="nav-link">
+          Manage Product
         </NavLink>
-        <NavLink to="/about" className="nav-link">
-          About
-        </NavLink>
-        <NavLink to="/contact" className="nav-link">
-          Contact
-        </NavLink>
-        <NavLink to="" className="nav-link">
-          Admin
+        <NavLink to="orders" className="nav-link">
+          Manage Order
         </NavLink>
       </Nav>
     </div>

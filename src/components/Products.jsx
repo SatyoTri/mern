@@ -11,6 +11,8 @@ const Products = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem('token'));
   let componentMounted = true;
 
   useEffect(() => {
@@ -32,11 +34,21 @@ const Products = () => {
     getProducts();
   }, []);
 
-   const dispatch = useDispatch();
-
-  const addProduct = async (product) => {
-   dispatch(addCart(product));
+  const handleAddToCart = async (productId) => {
+    try {
+      const config = {
+        headers: {
+          'Authorization': `${token}`
+        }
+      };
+      const response = await axios.post(`http://localhost:5000/cart/add-to-cart/${productId}`, { quantity: 1 }, config);
+      alert("Add to cart success");
+      setCart(response.data.cart);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const Loading = () => {
     return (
@@ -107,15 +119,12 @@ const Products = () => {
                   <p className="card-text">{product.description.substring(0, 90)}...</p>
                 </div>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item lead">$ {product.price}</li>
+                  <li className="list-group-item lead">Rp. {product.price}</li>
                 </ul>
                 <div className="card-body">
                   <Link to={"/product/" + product._id} className="btn btn-dark m-1">
-                    Buy Now
+                    More Details
                   </Link>
-                  <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
-                    Add to Cart
-                  </button>
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ const path = require('path');
 const cors = require('cors');
 const authRoutes = require('./routes/auth')
 const cartRoutes = require('./routes/cart')
+const checkoutRoute = require('./routes/order')
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -16,7 +17,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
-app.use('/cart', cartRoutes)
+app.use('/cart', cartRoutes);
+app.use('/order', checkoutRoute);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB

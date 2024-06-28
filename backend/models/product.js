@@ -10,9 +10,22 @@ const productSchema = new schema({
         type: Number,
         required: true
     },
-    description: String,
-    image: String,
-    category: String
+     description: {
+    type: String,
+    required: true
+  },
+    image: {
+        type: String
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    sizes: {
+        type: [String], 
+        required: true
+    }
+    
 });
 
-module.exports = mongoose.model('product', productSchema);
+module.exports = mongoose.model('Product', productSchema);

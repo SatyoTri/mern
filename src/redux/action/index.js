@@ -5,7 +5,7 @@ export const getCart = () => async (dispatch) => {
     const token = getToken();
 
     try {
-        const response = await axios.get('http://localhost:5000/cart', {
+        const response = await axios.get('http://localhost:5000/cart/cart', {
             headers: {
                 'Authorization': `${token}`
             }
@@ -33,7 +33,7 @@ export const addCart = (product) => async (dispatch) => {
 
   console.log('Request Body:', requestBody);
     try {
-    const response = await axios.post('http://localhost:5000/cart', requestBody, {
+    const response = await axios.post('http://localhost:5000//add-to-cart/:productId', requestBody, {
       headers: {
         'Content-Type': 'application/json',
          'Authorization': `${token}`

@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useParams } from "react-router-dom";
-import Marquee from "react-fast-marquee";
-import { useDispatch } from "react-redux";
-import { addCart } from "../redux/action";
+import axios from "axios";
 
 import { Footer, Navbar } from "../components";
 
 const Product = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [selectedSize, setSelectedSize] = useState("");
 
-  const dispatch = useDispatch();
-
-  const addProduct = (product) => {
-    dispatch(addCart(product));
+  const handleAddToCart = async (productId) => {
+    if (!selectedSize) {
+      alert("Please select a size");
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          'Authorization': `${token}`
+        }
+      };
+      const response = await axios.post(`http://localhost:5000/cart/add-to-cart/${productId}`, { quantity: 1, size: selectedSize }, config);
+      alert("Add to cart success");
+      setCart(response.data.cart);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +65,7 @@ const Product = () => {
       </>
     );
   };
-   
+
   const ShowProduct = () => {
     return (
       <>
@@ -69,11 +83,27 @@ const Product = () => {
             <div className="col-md-6 col-md-6 py-5">
               <h4 className="text-uppercase text-muted">{product.category}</h4>
               <h1 className="display-5">{product.title}</h1>
-              <h3 className="display-6 my-4">${product.price}</h3>
+              <h3 className="display-6 my-4">Rp.{product.price}</h3>
               <p className="lead">{product.description}</p>
+              
+              <div className="my-3">
+              <label className="form-label">Select Size:</label>
+              <div>
+                {product.sizes && product.sizes[0].split(',').map((size, index) => (
+                  <button
+                    key={index}
+                    className={`btn btn-outline-dark mx-1 ${selectedSize === size.replace(/"/g, '') ? "btn-dark text-white" : ""}`}
+                    onClick={() => setSelectedSize(size.replace(/"/g, ''))}
+                  >
+                    {size.replace(/"/g, '')}
+                  </button>
+                ))}
+              </div>
+            </div>
+              
               <button
                 className="btn btn-outline-dark"
-                onClick={() => addProduct(product)}
+                onClick={() => handleAddToCart(product._id)}
               >
                 Add to Cart
               </button>

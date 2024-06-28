@@ -21,8 +21,3 @@
   background-color: #e9ecef;
   color: #007bff;
 }
-
-.sidebar .nav-link.active {
-  background-color: #007bff;
-  color: white;
-}

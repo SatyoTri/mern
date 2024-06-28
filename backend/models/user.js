@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
   username : {
@@ -18,7 +19,14 @@ const userSchema = new mongoose.Schema({
   role: { 
         type: Number, 
         default: 0 
-}, 
+},
+cart: [
+        {
+            product: { type: Schema.Types.ObjectId, ref: 'Product' },
+            quantity: { type: Number, default: 1 },
+            size: { type: String, required: true },
+        }
+    ] 
 });
 
 userSchema.pre('save', async function (next) {

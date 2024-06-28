@@ -1,0 +1,9 @@
+.cart-item .col-lg-3, .cart-item .col-lg-2, .cart-item .col-lg-4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cart-item .col-lg-3 img {
+    max-width: 100%;
+    height: auto;
+}

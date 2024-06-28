@@ -1,121 +1,98 @@
-// routes/cart.js
 const express = require('express');
 const router = express.Router();
-const Cart = require('../models/cart');
-const Product = require('../models/product');
 const { authMiddleware } = require('../middleware/auth');
+const Product = require('../models/product');
 
-// Get the cart for the logged-in user
-router.get('/', authMiddleware, async (req, res) => {
-    try {
-        const cart = await Cart.findOne({ userId: req.user._id });
+// Middleware to ensure authentication
+router.use(authMiddleware);
 
-        if (!cart) {
-            return res.status(404).send({ message: 'Cart not found' });
-        }
-
-        // Collect all productIds from cart items
-        const productIds = cart.items.map(item => item.productId);
-
-        // Fetch all products related to the productIds
-        const products = await Product.find({ _id: { $in: productIds } });
-
-        // Map products to items in the cart
-        const populatedCart = {
-            _id: cart._id,
-            userId: cart.userId,
-            items: cart.items.map(item => {
-                // Find the corresponding product for each item
-                const product = products.find(prod => prod._id.equals(item.productId));
-                return {
-                    _id: item._id,
-                    productId: product, // Attach the entire product object
-                    quantity: item.quantity
-                };
-            })
-        };
-
-        res.send(populatedCart);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
-
-// Add an item to the cart
-router.post('/', authMiddleware, async (req, res) => {
-    const { productId, quantity } = req.body;;
-
-    // Validasi input
-    if (!productId || !quantity) {
-        return res.status(400).send({ message: 'ProductId and quantity are required' });
-    }
+// Add item to cart
+router.post('/add-to-cart/:productId', async (req, res) => {
+    const { productId } = req.params;
+    const { quantity,size } = req.body;
 
     try {
-        let cart = await Cart.findOne({ userId: req.user._id });
-
-        if (!cart) {
-            cart = new Cart({ userId: req.user._id, items: [] });
-        }
-
         const product = await Product.findById(productId);
         if (!product) {
-            return res.status(404).send({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        const existingItem = cart.items.find(item => item.productId.equals(productId));
-        if (existingItem) {
-            existingItem.quantity += quantity;
+        const user = req.user; // user retrieved from authMiddleware
+
+        // Check if the product already exists in the cart
+        const existingCartItem = user.cart.find(item => item.product.toString() === productId);
+        if (existingCartItem) {
+            // If exists, update the quantity
+            existingCartItem.quantity += parseInt(quantity);
         } else {
-            cart.items.push({ productId, quantity });
+            // If not exists, add new item to cart
+            user.cart.push({ product: productId, quantity,size });
         }
 
-        await cart.save();
-        res.status(201).send(cart);
+        await user.save();
+
+        res.status(200).json({ message: 'Product added to cart successfully', cart: user.cart });
     } catch (error) {
-        console.error('Error adding to cart:', error);
-        res.status(500).send({ message: 'Internal server error' });
+        res.status(500).json({ error: 'Failed to add product to cart' });
     }
 });
 
-// Update the quantity of an item in the cart
-router.put('/:productId', authMiddleware, async (req, res) => {
+// Get cart items
+router.get('/cart', async (req, res) => {
+    try {
+        const user = req.user; // user retrieved from authMiddleware
+        
+        // Fetch products manually
+        const cartItems = await Promise.all(user.cart.map(async (item) => {
+            const product = await Product.findById(item.product);
+            return {
+                product,
+                quantity: item.quantity,
+                size: item.size
+            };
+        }));
+
+        res.status(200).json(cartItems);
+    } catch (error) {
+        console.error('Error retrieving cart items:', error);
+        res.status(500).json({ error: 'Failed to retrieve cart items' });
+    }
+});
+
+// Update item quantity in cart
+router.put('/update-cart/:productId', async (req, res) => {
     const { productId } = req.params;
     const { quantity } = req.body;
 
     try {
-        const cart = await Cart.findOne({ userId: req.user._id });
-        if (!cart) {
-            return res.status(404).send({ message: 'Cart not found' });
+        const user = req.user; // user retrieved from authMiddleware
+        const cartItem = user.cart.find(item => item.product.toString() === productId);
+
+        if (!cartItem) {
+            return res.status(404).json({ message: 'Product not found in cart' });
         }
 
-        const item = cart.items.find(item => item.productId.equals(productId));
-        if (!item) {
-            return res.status(404).send({ message: 'Item not found in cart' });
-        }
+        cartItem.quantity = quantity;
+        await user.save();
 
-        item.quantity = quantity;
-        await cart.save();
-        res.send(cart);
+        res.status(200).json({ message: 'Cart updated successfully', cart: user.cart });
     } catch (error) {
-        res.status(400).send(error);
+        res.status(500).json({ error: 'Failed to update cart' });
     }
 });
 
-// Remove an item from the cart
-router.delete('/:productId', authMiddleware, async (req, res) => {
+// Remove item from cart
+router.delete('/remove-from-cart/:productId', async (req, res) => {
     const { productId } = req.params;
 
     try {
-        const cart = await Cart.findOne({ userId: req.user._id });
-        if (!cart) {
-            return res.status(404).send({ message: 'Cart not found' });
-        }
+        const user = req.user; // user retrieved from authMiddleware
+        user.cart = user.cart.filter(item => item.product.toString() !== productId);
+        await user.save();
 
-        cart.items = cart.items.filter(item => !item.productId.equals(productId));
-        await cart.save();
-        res.send(cart);
+        res.status(200).json({ message: 'Product removed from cart successfully', cart: user.cart });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ error: 'Failed to remove product from cart' });
     }
 });
 

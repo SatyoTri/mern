@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts, deleteProduct } from '../../api/api';
 import { Table, Button } from 'react-bootstrap';
-import ProductForm from '../../pages/Admin/ProductForm';
+import ProductForm from './ProductForm';
 
-const AdminDashboard = () => {
+const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Admin Dashboard</h2>
+        <h2>Manage Products</h2>
         <Button variant="primary" onClick={handleAddProduct}>
           Add Product
         </Button>
@@ -84,4 +84,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default ManageProducts;
