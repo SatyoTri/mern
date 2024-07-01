@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/reducer/auth';
+import './main.css'
 
 const Navbar = () => {
   const state = useSelector(state => state.handleCart);
@@ -11,21 +12,39 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    // Tambahkan logika tambahan untuk membersihkan data pengguna atau state lainnya jika perlu
   };
 
   const renderAuthButtons = () => {
     if (isLoggedIn) {
-      return (
-        <>
-          <button className="btn btn-outline-dark m-2" onClick={handleLogout}>
-            <i className="fa fa-sign-out-alt mr-1"></i> Logout
-          </button>
-          <NavLink to="/cart" className="btn btn-outline-dark m-2">
-            <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
-          </NavLink>
-        </>
-      );
+      if (isAdmin) {
+        return (
+          <>
+            <button className="btn btn-outline-dark m-2" onClick={handleLogout}>
+              <i className="fa fa-sign-out-alt mr-1"></i> Logout
+            </button>
+            <NavLink to="/cart" className="btn btn-outline-dark m-2">
+              <i className="fa fa-cart-shopping mr-1"></i>Cart
+            </NavLink>
+            <NavLink to="/dashboard" className="btn btn-outline-dark m-2">
+              <i className="fa fa-dashboard mr-1"></i> Dashboard
+            </NavLink>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <button className="btn btn-outline-dark m-2" onClick={handleLogout}>
+              <i className="fa fa-sign-out-alt mr-1"></i> Logout
+            </button>
+            <NavLink to="/cart" className="btn btn-outline-dark m-2">
+              <i className="fa fa-cart-shopping mr-1"></i>Cart
+            </NavLink>
+            <NavLink to="/order" className="btn btn-outline-dark m-2">
+              <i className="fa fa-dashboard mr-1"></i> Dashboard
+            </NavLink>
+          </>
+        );
+      }
     } else {
       return (
         <>
@@ -36,7 +55,7 @@ const Navbar = () => {
             <i className="fa fa-user-plus mr-1"></i> Register
           </NavLink>
           <NavLink to="/cart" className="btn btn-outline-dark m-2">
-            <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
+            <i className="fa fa-cart-shopping mr-1"></i> Cart
           </NavLink>
         </>
       );
@@ -47,7 +66,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
       <div className="container">
         <NavLink className="navbar-brand fw-bold fs-4 px-2" to="/">
-          React Ecommerce
+          Coozy <span className="text-info">Hood</span>
         </NavLink>
         <button
           className="navbar-toggler mx-2"
@@ -62,34 +81,27 @@ const Navbar = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav m-auto my-2 text-center">
+          <ul className="navbar-nav m-auto my-2 text-center ">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/">
+              <NavLink className="nav-link" to="/" activeClassName="active">
                 Home
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/product">
+              <NavLink className="nav-link" to="/product" activeClassName="active">
                 Products
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/about">
+              <NavLink className="nav-link" to="/about" activeClassName="active">
                 About
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/contact">
+              <NavLink className="nav-link" to="/contact" activeClassName="active">
                 Contact
               </NavLink>
             </li>
-            {isLoggedIn && isAdmin && (
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/admin">
-                  Dashboard
-                </NavLink>
-              </li>
-            )}
           </ul>
           <div className="buttons text-center">{renderAuthButtons()}</div>
         </div>

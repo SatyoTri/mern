@@ -14,6 +14,10 @@ const orderItemSchema = new Schema({
     size:{
         type: String,
         required: true
+    },
+     title: { 
+        type: String,
+        required: true
     }
 });
 const checkoutSchema = new mongoose.Schema({

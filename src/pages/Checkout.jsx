@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Footer, Navbar } from "../components";
 import qrPict from "../components/Qr.png"
 
-
 const CheckoutForm = () => {
+    const { state } = useLocation();
+    const { totalAmount } = state || { totalAmount: 0 };
+
     const [formData, setFormData] = useState({
         recipientName: '',
         address: '',
@@ -51,22 +54,24 @@ const CheckoutForm = () => {
             setMessage('Checkout failed');
         }
     };
-      const ownerInfo = {
-        qrCodeUrl: qrPict, // Replace with your actual QR code URL
-        accountNumber: '1234567890' // Replace with your actual account number
+    
+    const ownerInfo = {
+        qrCodeUrl: qrPict, 
+        accountNumber: '5775724835' 
     };
 
     return (
         <>
             <Navbar />
-              
             <div className="container mt-5">
                 <h2>Checkout Form</h2>
                 <div className="text-center">
-                <h4>Owner's QR Code and Account Number</h4>
-                {ownerInfo.qrCodeUrl && <img src={ownerInfo.qrCodeUrl} alt="QR Code" className="img-fluid mb-3"style={{ maxWidth: '200px' }}/>}
-                <p>Account Number: {ownerInfo.accountNumber}</p>
-            </div>
+                    <h4>Owner's QR Code and Account Number</h4>
+                    {ownerInfo.qrCodeUrl && <img src={ownerInfo.qrCodeUrl} alt="QR Code" className="img-fluid mb-3"style={{ maxWidth: '200px' }}/>}
+                    <p> Number: {ownerInfo.accountNumber} </p>
+                       <h4>Total Amount: Rp. {totalAmount.toLocaleString()}</h4>
+                       <p>Please transfer according to the amount above</p>
+                </div>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className="mb-3">
                         <label className="form-label">Recipient Name</label>

@@ -14,8 +14,8 @@ const ProductForm = ({ show, handleClose, editProduct, onSuccess }) => {
 
   useEffect(() => {
     if (editProduct) {
-      const fetchProduct = async () => {
-        const response = await getProductById(editProduct.id);
+        const fetchProduct = async () => {
+        const response = await getProductById(editProduct);
         setFormData({ ...response.data, image: null });
       };
       fetchProduct();
@@ -48,7 +48,7 @@ const ProductForm = ({ show, handleClose, editProduct, onSuccess }) => {
 
     try {
       if (editProduct) {
-        await updateProduct(editProduct._id, productData);
+        await updateProduct(editProduct, productData);
       } else {
         await createProduct(productData);
       }

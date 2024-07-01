@@ -1,5 +1,3 @@
-import handleCart from './handleCart';
-
 // Fungsi untuk parse JWT token
 const parseJwt = (token) => {
   try {
@@ -13,9 +11,9 @@ const parseJwt = (token) => {
 const LOGIN_USER = 'LOGIN_USER';
 const LOGOUT_USER = 'LOGOUT_USER';
 
-// Initial State
+// Initial State - modifikasi untuk memuat token dari localStorage jika ada
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: !!localStorage.getItem('token'), // Cek apakah token ada di localStorage
   user: null,
   isAdmin: false,
 };
@@ -31,31 +29,26 @@ const authReducer = (state = initialState, action) => {
       const decodedToken = parseJwt(action.payload);
       const isAdmin = decodedToken.role === 1;
 
-      const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-
       return {
         ...state,
         isLoggedIn: true,
         user: action.payload,
         isAdmin: isAdmin,
-        cart: storedCart,
       };
     case LOGOUT_USER:
-       localStorage.removeItem('token');
-      localStorage.removeItem('cart')// Hapus token dari localStorage saat logout
+      localStorage.removeItem('token');
 
-       handleCart([], action);
       return {
         ...state,
         isLoggedIn: false,
         user: null,
         isAdmin: false,
-         cart: []
       };
     default:
       return state;
   }
 };
+
 
 // Action Creators
 export const loginUser = (token) => ({

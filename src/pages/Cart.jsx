@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Footer, Navbar } from "../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './Cart.css';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCartItems();
@@ -29,25 +30,6 @@ const Cart = () => {
         }
     };
 
-    const addItemToCart = async (productId, quantity) => {
-        try {
-            const response = await fetch(`http://localhost:5000/cart/add-to-cart/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ quantity })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add product to cart');
-            }
-            fetchCartItems(); // Refresh cart after adding
-        } catch (error) {
-            console.error('Error adding product to cart:', error);
-        }
-    };
-
     const removeItemFromCart = async (productId) => {
         try {
             const response = await fetch(`http://localhost:5000/cart/remove-from-cart/${productId}`, {
@@ -68,6 +50,10 @@ const Cart = () => {
 
     const updateCartItemQuantity = async (productId, quantity) => {
         try {
+            if (quantity === 0) {
+                await removeItemFromCart(productId);
+                return;
+            }
             const response = await fetch(`http://localhost:5000/cart/update-cart/${productId}`, {
                 method: 'PUT',
                 headers: {
@@ -103,12 +89,14 @@ const Cart = () => {
     const showCart = () => {
         let subtotal = 0;
         let totalItems = 0;
-        const shipping = 30.0;
+        const shipping = 10000;
 
         cartItems.forEach(item => {
             subtotal += item.product.price * item.quantity;
             totalItems += item.quantity;
         });
+
+        const totalAmount = subtotal + shipping;
 
         return (
             <section className="h-100 gradient-custom">
@@ -163,7 +151,7 @@ const Cart = () => {
                                             </div>
                                             <div className="row">
                                                 <div className="col text-end">
-                                                    <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
+                                                    <strong>Rp. {(item.product.price * item.quantity).toLocaleString()}</strong>
                                                 </div>
                                             </div>
                                             <hr className="my-4" />
@@ -181,20 +169,23 @@ const Cart = () => {
                                     <ul className="list-group list-group-flush">
                                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                             Products ({totalItems})
-                                            <span>${subtotal.toFixed(2)}</span>
+                                            <span>Rp. {subtotal.toLocaleString()}</span>
                                         </li>
                                         <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                                             Shipping
-                                            <span>${shipping.toFixed(2)}</span>
+                                            <span>Rp. {shipping.toLocaleString()}</span>
                                         </li>
                                         <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                             <div><strong>Total amount</strong></div>
-                                            <span><strong>${(subtotal + shipping).toFixed(2)}</strong></span>
+                                            <span><strong>Rp. {totalAmount.toLocaleString()}</strong></span>
                                         </li>
                                     </ul>
-                                    <Link to="/checkout" className="btn btn-primary btn-lg btn-block">
+                                    <button
+                                        className="btn btn-primary btn-lg btn-block"
+                                        onClick={() => navigate("/checkout", { state: { totalAmount } })}
+                                    >
                                         Go to checkout
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         </div>

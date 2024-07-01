@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { Toast } from "react-bootstrap";
 
 import { Footer, Navbar } from "../components";
 
@@ -12,8 +13,16 @@ const Product = () => {
   const [cart, setCart] = useState([]);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [selectedSize, setSelectedSize] = useState("");
+  const [showToastSuccess, setShowToastSuccess] = useState(false); 
+  const [showToastLogin, setShowToastLogin] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   const handleAddToCart = async (productId) => {
+    if (!isLoggedIn) {
+      setShowToastLogin(true);
+      return;
+    }
     if (!selectedSize) {
       alert("Please select a size");
       return;
@@ -25,8 +34,8 @@ const Product = () => {
         }
       };
       const response = await axios.post(`http://localhost:5000/cart/add-to-cart/${productId}`, { quantity: 1, size: selectedSize }, config);
-      alert("Add to cart success");
       setCart(response.data.cart);
+      setShowToastSuccess(true); 
     } catch (error) {
       console.error(error);
     }
@@ -38,6 +47,11 @@ const Product = () => {
       const response = await fetch(`http://localhost:5000/products/${id}`);
       const data = await response.json();
       setProduct(data);
+
+      const recommendedResponse = await fetch(`http://localhost:5000/products/category/${data.category}`);
+      const recommendedData = await recommendedResponse.json();
+      setRecommendedProducts(recommendedData.filter(prod => prod._id !== data._id).slice(0, 4));
+      
       setLoading(false);
     };
     getProduct();
@@ -83,23 +97,23 @@ const Product = () => {
             <div className="col-md-6 col-md-6 py-5">
               <h4 className="text-uppercase text-muted">{product.category}</h4>
               <h1 className="display-5">{product.title}</h1>
-              <h3 className="display-6 my-4">Rp.{product.price}</h3>
+              <h3 className="display-6 my-4">{product.price}</h3>
               <p className="lead">{product.description}</p>
               
               <div className="my-3">
-              <label className="form-label">Select Size:</label>
-              <div>
-                {product.sizes && product.sizes[0].split(',').map((size, index) => (
-                  <button
-                    key={index}
-                    className={`btn btn-outline-dark mx-1 ${selectedSize === size.replace(/"/g, '') ? "btn-dark text-white" : ""}`}
-                    onClick={() => setSelectedSize(size.replace(/"/g, ''))}
-                  >
-                    {size.replace(/"/g, '')}
-                  </button>
-                ))}
+                <label className="form-label">Select Size:</label>
+                <div>
+                  {product.sizes && product.sizes[0].split(',').map((size, index) => (
+                    <button
+                      key={index}
+                      className={`btn btn-outline-dark mx-1 ${selectedSize === size.replace(/"/g, '') ? "btn-dark text-white" : ""}`}
+                      onClick={() => setSelectedSize(size.replace(/"/g, ''))}
+                    >
+                      {size.replace(/"/g, '')}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
               
               <button
                 className="btn btn-outline-dark"
@@ -113,7 +127,36 @@ const Product = () => {
             </div>
           </div>
         </div>
+        <hr />
       </>
+    );
+  };
+
+  const ShowRecommendedProducts = () => {
+    return (
+      <div className="container my-5">
+        <h2 className="mb-4">Recommended Products</h2>
+        <div className="row">
+          {recommendedProducts.map((item) => (
+            <div className="col-md-3 col-sm-6 mb-4" key={item._id}>
+              <Link to={`/products/${item._id}`} className="text-decoration-none text-dark">
+                <div className="card">
+                  <img
+                    className="card-img-top"
+                    src={`http://localhost:5000/uploads/${item.image}`}
+                    alt={item.title}
+                    height="200px"
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{item.title}</h5>
+                    <p className="card-text">{item.price}</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   };
 
@@ -121,6 +164,44 @@ const Product = () => {
     <>
       <Navbar />
       {loading ? <Loading /> : <ShowProduct />}
+      {!loading && <ShowRecommendedProducts />}
+      
+      <Toast
+        show={showToastSuccess}
+        onClose={() => setShowToastSuccess(false)}
+        delay={3000}
+        autohide
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Header closeButton={false}>
+          <strong className="me-auto">Success</strong>
+        </Toast.Header>
+        <Toast.Body>Product added to cart successfully!</Toast.Body>
+      </Toast>
+
+      <Toast
+        show={showToastLogin && !isLoggedIn}
+        onClose={() => setShowToastLogin(false)}
+        delay={3000}
+        autohide
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Header closeButton={false}>
+          <strong className="me-auto">Info</strong>
+        </Toast.Header>
+        <Toast.Body>Please login to add products to cart.</Toast.Body>
+      </Toast>
+
       <Footer />
     </>
   );

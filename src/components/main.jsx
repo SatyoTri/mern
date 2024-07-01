@@ -1,29 +1,26 @@
 import React from "react";
+import './main.css';
 
 const Home = () => {
   return (
-    <>
-      <div className="hero border-1 pb-3">
-        <div className="card bg-dark text-white border-0 mx-3">
+    <div className="hero-section">
+      <div className="content-container">
+        <div className="text-container">
+          <h1 className="title">New Season Arrivals</h1>
+          <p className="description">
+            Discover the latest trends with our new arrivals. Perfect for any occasion.
+          </p>
+          <button className="btn btn-primary">Shop Now</button>
+        </div>
+        <div className="image-container">
           <img
-            className="card-img img-fluid"
-            src="./assets/main.png.jpg"
-            alt="Card"
-            height={500}
+            className="hero-image"
+            src="./assets/hero_image.png"
+            alt="New Season"
           />
-          <div className="card-img-overlay d-flex align-items-center">
-            <div className="container">
-              <h5 className="card-title fs-1 text fw-lighter">New Season Arrivals</h5>
-              <p className="card-text fs-5 d-none d-sm-block ">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

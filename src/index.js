@@ -9,8 +9,11 @@ import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register,
 import AdminLayout from './components/admin/AdminLayout';
 import ManageProducts from "./pages/Admin/ManageProduct"
 import ManageOrders from './pages/Admin/ManageOrder';
+import UserOrder from './pages/UserOrder';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 root.render(
   <BrowserRouter>
     <Provider store={store}>
@@ -26,6 +29,7 @@ root.render(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/product/*" element={<PageNotFound />} />
+        <Route path="/order" element={<UserOrder/>}/>
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<ManageProducts />} />
