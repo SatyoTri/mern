@@ -1,8 +1,9 @@
 import React from 'react';
 import AdminSidebar from './Sidebar';
+import Navbar from '../Navbar';
 import { Outlet } from 'react-router-dom';
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
   return (
     <div className="admin-layout">
       <AdminSidebar />

@@ -16,7 +16,6 @@ const Product = () => {
   const [showToastSuccess, setShowToastSuccess] = useState(false); 
   const [showToastLogin, setShowToastLogin] = useState(false); 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
-  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   const handleAddToCart = async (productId) => {
     if (!isLoggedIn) {
@@ -48,9 +47,6 @@ const Product = () => {
       const data = await response.json();
       setProduct(data);
 
-      const recommendedResponse = await fetch(`http://localhost:5000/products/category/${data.category}`);
-      const recommendedData = await recommendedResponse.json();
-      setRecommendedProducts(recommendedData.filter(prod => prod._id !== data._id).slice(0, 4));
       
       setLoading(false);
     };
@@ -97,7 +93,7 @@ const Product = () => {
             <div className="col-md-6 col-md-6 py-5">
               <h4 className="text-uppercase text-muted">{product.category}</h4>
               <h1 className="display-5">{product.title}</h1>
-              <h3 className="display-6 my-4">{product.price}</h3>
+              <h3 className="display-6 my-4">Rp. {product.price}</h3>
               <p className="lead">{product.description}</p>
               
               <div className="my-3">
@@ -132,39 +128,11 @@ const Product = () => {
     );
   };
 
-  const ShowRecommendedProducts = () => {
-    return (
-      <div className="container my-5">
-        <h2 className="mb-4">Recommended Products</h2>
-        <div className="row">
-          {recommendedProducts.map((item) => (
-            <div className="col-md-3 col-sm-6 mb-4" key={item._id}>
-              <Link to={`/products/${item._id}`} className="text-decoration-none text-dark">
-                <div className="card">
-                  <img
-                    className="card-img-top"
-                    src={`http://localhost:5000/uploads/${item.image}`}
-                    alt={item.title}
-                    height="200px"
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{item.title}</h5>
-                    <p className="card-text">{item.price}</p>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <>
       <Navbar />
       {loading ? <Loading /> : <ShowProduct />}
-      {!loading && <ShowRecommendedProducts />}
       
       <Toast
         show={showToastSuccess}

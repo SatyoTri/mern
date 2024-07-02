@@ -4,8 +4,9 @@ const multer = require('multer');
 const router = express.Router();
 const { authMiddleware } = require('../middleware/auth');
 const Checkout = require('../models/order');
-const User = require('../models/user'); // Import model User
-const Product = require('../models/product'); // I
+const User = require('../models/user'); 
+const Product = require('../models/product');
+const History = require('../models/History')
 
 // Middleware to ensure authentication for POST /checkout route
 router.use('/checkout', authMiddleware);
@@ -89,6 +90,47 @@ router.get('/orders', async (req, res) => {
     } catch (error) {
         console.error('Error fetching user orders:', error);
         res.status(500).json({ error: 'Failed to fetch user orders' });
+    }
+});
+
+router.patch('/complete/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const checkout = await Checkout.findById(id);
+        if (!checkout) {
+            return res.status(404).json({ error: 'Checkout not found' });
+        }
+
+        const history = new History({
+            user: checkout.user,
+            recipientName: checkout.recipientName,
+            address: checkout.address,
+            whatsappNumber: checkout.whatsappNumber,
+            proofOfTransfer: checkout.proofOfTransfer,
+            items: checkout.items,
+            status: 'Completed'
+        });
+
+        await history.save();
+        await Checkout.findByIdAndDelete(id);
+
+        res.status(200).json({ message: 'Checkout marked as completed and moved to history', history });
+    } catch (error) {
+        console.error('Error updating checkout status:', error);
+        res.status(500).json({ error: 'Failed to update checkout status' });
+    }
+});
+
+// Get all history orders (no authentication required)
+router.get('/history', async (req, res) => {
+    try {
+        const historyOrders = await History.find({});
+
+        res.status(200).json({ historyOrders });
+    } catch (error) {
+        console.error('Error fetching history orders:', error);
+        res.status(500).json({ error: 'Failed to fetch history orders' });
     }
 });
 

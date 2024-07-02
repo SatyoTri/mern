@@ -10,6 +10,8 @@ import AdminLayout from './components/admin/AdminLayout';
 import ManageProducts from "./pages/Admin/ManageProduct"
 import ManageOrders from './pages/Admin/ManageOrder';
 import UserOrder from './pages/UserOrder';
+import HistoryOrder from './pages/Admin/HistoryOrder';
+import AdminDashboard from './components/admin/AdminDashboard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -32,6 +34,7 @@ root.render(
         <Route path="/order" element={<UserOrder/>}/>
 
         <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
           <Route path="products" element={<ManageProducts />} />
           <Route path="orders" element={<ManageOrders />} />
         </Route>

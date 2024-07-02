@@ -58,7 +58,7 @@ const ManageProducts = () => {
         <tbody>
           {products.map((product) => (
             <tr key={product._id}>
-              <td>{product.image}</td>
+              <td><img src={`http://localhost:5000/uploads/${product.image}`} alt="" style={{ width: '100px', height: 'auto' }} /></td>
               <td>{product.title}</td>
               <td>{product.price}</td>
               <td>{product.category}</td>

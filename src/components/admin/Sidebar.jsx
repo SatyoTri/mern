@@ -17,6 +17,10 @@ const Sidebar = () => {
         <NavLink to="orders" className="nav-link">
           Manage Order
         </NavLink>
+        <NavLink to="/" className="nav-link">
+          Go To Website Page
+        </NavLink>
+
       </Nav>
     </div>
   );

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 const ManageOrder = () => {
   const [checkouts, setCheckouts] = useState([]);
 
@@ -32,13 +31,32 @@ const ManageOrder = () => {
     ));
   };
 
-  const handleComplete = (id) => {
-    console.log('Complete button clicked for:', id);
+  const handleComplete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/order/complete/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to mark checkout as completed');
+      }
+
+      const data = await response.json();
+      setCheckouts(checkouts.map(checkout =>
+        checkout._id === id ? { ...checkout, status: 'Completed' } : checkout
+      ));
+      alert('Checkout marked as completed:', data.checkout);
+    } catch (error) {
+      console.error('Error marking checkout as completed:', error);
+    }   
   };
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Admin Checkouts</h2>
+      <h2 className="mb-4">Manage Order</h2>
       {checkouts.map((checkout) => (
         <div key={checkout._id} className="card mb-3 shadow-sm">
           <div className="card-header bg-primary text-white">

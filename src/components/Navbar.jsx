@@ -25,7 +25,7 @@ const Navbar = () => {
             <NavLink to="/cart" className="btn btn-outline-dark m-2">
               <i className="fa fa-cart-shopping mr-1"></i>Cart
             </NavLink>
-            <NavLink to="/dashboard" className="btn btn-outline-dark m-2">
+            <NavLink to="/admin" className="btn btn-outline-dark m-2">
               <i className="fa fa-dashboard mr-1"></i> Dashboard
             </NavLink>
           </>
@@ -38,9 +38,6 @@ const Navbar = () => {
             </button>
             <NavLink to="/cart" className="btn btn-outline-dark m-2">
               <i className="fa fa-cart-shopping mr-1"></i>Cart
-            </NavLink>
-            <NavLink to="/order" className="btn btn-outline-dark m-2">
-              <i className="fa fa-dashboard mr-1"></i> Dashboard
             </NavLink>
           </>
         );

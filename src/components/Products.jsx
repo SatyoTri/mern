@@ -18,7 +18,7 @@ const Products = () => {
     const getProducts = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/products/");
+        const response = await fetch("https://backend-ecommerce-theta-one.vercel.app/products");
         const products = await response.json();
         setData(products);
         setFilter(products);
@@ -69,7 +69,7 @@ const Products = () => {
             <Link to={"/product/" + product._id}>
               <img
                 className="card-img-top"
-                src={`http://localhost:5000/uploads/${product.image}`}
+                src={`https://backend-ecommerce-theta-one.vercel.app/uploads/${product.image}`}
                 alt="Product"
                 style={{ height: "300px", objectFit: "cover" }}
               />

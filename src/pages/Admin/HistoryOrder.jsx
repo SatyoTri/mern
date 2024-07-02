@@ -1,6 +1,6 @@
-import React,{useEffect,useState} from 'react';
+import React, { useState, useEffect } from 'react';
 
-const AdminDashboard = () => {
+const HistoryOrder = () => {
   const [historyOrders, setHistoryOrders] = useState([]);
 
   useEffect(() => {
@@ -75,6 +75,6 @@ const AdminDashboard = () => {
       ))}
     </div>
   );
-};
+}
 
-export default AdminDashboard;
+export default HistoryOrder;
