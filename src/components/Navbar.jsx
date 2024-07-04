@@ -1,17 +1,19 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/reducer/auth';
 import './main.css'
 
 const Navbar = () => {
   const state = useSelector(state => state.handleCart);
+  const navigate = useNavigate();
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const isAdmin = useSelector(state => state.auth.isAdmin);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    navigate('/');
   };
 
   const renderAuthButtons = () => {

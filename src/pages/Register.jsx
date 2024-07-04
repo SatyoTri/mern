@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Footer, Navbar } from '../components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Toast, ToastContainer } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // To manage loading state
+  const [showToast, setShowToast] = useState(false); // To manage toast visibility
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission
@@ -33,7 +37,14 @@ const Register = () => {
       const data = await response.json();
       console.log('Registration successful:', data);
 
-      // Redirect to login or handle success scenario
+      // Show success toast
+      setShowToast(true);
+
+      // Redirect to login after a delay to show toast
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+
     } catch (error) {
       console.error('Registration error:', error.message);
       // Handle error scenario (e.g., show error message to user)
@@ -109,6 +120,20 @@ const Register = () => {
         </div>
       </div>
       <Footer />
+
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header closeButton={false}>
+            <strong className="me-auto">Success</strong>
+          </Toast.Header>
+          <Toast.Body>Registration successful! Redirecting to login...</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 };

@@ -108,20 +108,6 @@ const Cart = () => {
                                     <h5 className="mb-0">Item List</h5>
                                 </div>
                                 <div className="card-body">
-                                    <div className="row text-center mb-3">
-                                        <div className="col-lg-3 col-md-12">
-                                            <p><strong>Product</strong></p>
-                                        </div>
-                                        <div className="col-lg-3 col-md-6">
-                                            <p><strong>Name</strong></p>
-                                        </div>
-                                        <div className="col-lg-2 col-md-6">
-                                            <p><strong>Size</strong></p>
-                                        </div>
-                                        <div className="col-lg-4 col-md-12">
-                                            <p><strong>Quantity</strong></p>
-                                        </div>
-                                    </div>
                                     {cartItems.map((item) => (
                                         <div key={item.product._id} className="cart-item mb-4">
                                             <div className="row d-flex align-items-center">

@@ -14,7 +14,8 @@ const Product = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [selectedSize, setSelectedSize] = useState("");
   const [showToastSuccess, setShowToastSuccess] = useState(false); 
-  const [showToastLogin, setShowToastLogin] = useState(false); 
+  const [showToastLogin, setShowToastLogin] = useState(false);
+  const [showToastSize, setShowToastSize] = useState(false); 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
 
   const handleAddToCart = async (productId) => {
@@ -23,7 +24,7 @@ const Product = () => {
       return;
     }
     if (!selectedSize) {
-      alert("Please select a size");
+       setShowToastSize(true);
       return;
     }
     try {
@@ -169,7 +170,23 @@ const Product = () => {
         </Toast.Header>
         <Toast.Body>Please login to add products to cart.</Toast.Body>
       </Toast>
-
+         <Toast
+        show={showToastSize}
+        onClose={() => setShowToastSize(false)}
+        delay={3000}
+        autohide
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Header closeButton={false}>
+          <strong className="me-auto">Info</strong>
+        </Toast.Header>
+        <Toast.Body>Please select a size.</Toast.Body>
+      </Toast>
       <Footer />
     </>
   );
