@@ -32,7 +32,7 @@ const Product = () => {
           'Authorization': `${token}`
         }
       };
-      const response = await axios.post(`http://localhost:5000/cart/add-to-cart/${productId}`, { quantity: 1, size: selectedSize }, config);
+      const response = await axios.post(`https://backend-ecommerce-theta-one.vercel.app/cart/add-to-cart/${productId}`, { quantity: 1, size: selectedSize }, config);
       setCart(response.data.cart);
       setShowToastSuccess(true); 
     } catch (error) {
@@ -43,7 +43,7 @@ const Product = () => {
   useEffect(() => {
     const getProduct = async () => {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/products/${id}`);
+      const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/products/${id}`);
       const data = await response.json();
       setProduct(data);
 
@@ -84,7 +84,7 @@ const Product = () => {
             <div className="col-md-6 col-sm-12 py-3">
               <img
                 className="img-fluid"
-                src={`http://localhost:5000/uploads/${product.image}`}
+                src={product.image}
                 alt={product.title}
                 width="400px"
                 height="400px"

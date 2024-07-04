@@ -69,7 +69,7 @@ const Products = () => {
             <Link to={"/product/" + product._id}>
               <img
                 className="card-img-top"
-                src={`https://backend-ecommerce-theta-one.vercel.app/uploads/${product.image}`}
+                src={product.image}
                 alt="Product"
                 style={{ height: "300px", objectFit: "cover" }}
               />

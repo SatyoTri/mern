@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://backend-ecommerce-theta-one.vercel.app';
 
 export const getProducts = async () => {
   return axios.get(`${API_URL}/products`);

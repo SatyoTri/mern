@@ -6,7 +6,7 @@ const ManageOrder = () => {
   useEffect(() => {
     const fetchCheckouts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/order/checkouts', {
+        const response = await fetch('https://backend-ecommerce-theta-one.vercel.app/order/checkouts', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const ManageOrder = () => {
 
   const handleComplete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/order/complete/${id}`, {
+      const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/order/complete/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -71,12 +71,12 @@ const ManageOrder = () => {
                 <p><strong>Proof of Transfer:</strong></p>
                 {checkout.proofOfTransfer && (
                   <a
-                    href={`http://localhost:5000/uploads/${checkout.proofOfTransfer}`}
+                    href={checkout.proofOfTransfer}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${checkout.proofOfTransfer}`}
+                      src={checkout.proofOfTransfer}
                       alt="Proof of Transfer"
                       className="img-thumbnail"
                       style={{ width: '150px' }}

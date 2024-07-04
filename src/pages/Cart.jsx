@@ -13,7 +13,7 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
         try {
-            const response = await fetch('http://localhost:5000/cart/cart', {
+            const response = await fetch('https://backend-ecommerce-theta-one.vercel.app/cart/cart', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const Cart = () => {
 
     const removeItemFromCart = async (productId) => {
         try {
-            const response = await fetch(`http://localhost:5000/cart/remove-from-cart/${productId}`, {
+            const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/cart/remove-from-cart/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const Cart = () => {
                 await removeItemFromCart(productId);
                 return;
             }
-            const response = await fetch(`http://localhost:5000/cart/update-cart/${productId}`, {
+            const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/cart/update-cart/${productId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const Cart = () => {
                                             <div className="row d-flex align-items-center">
                                                 <div className="col-lg-3 col-md-12">
                                                     <div className="bg-image rounded" data-mdb-ripple-color="light">
-                                                        <img src={`http://localhost:5000/uploads/${item.product.image}`} alt={item.product.title} className="img-fluid rounded" />
+                                                        <img src={item.product.image} alt={item.product.title} className="img-fluid rounded" />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3 col-md-6 text-center">

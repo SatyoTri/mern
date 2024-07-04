@@ -42,7 +42,7 @@ const CheckoutForm = () => {
         form.append('proofOfTransfer', proofOfTransfer);
 
         try {
-            const response = await axios.post('http://localhost:5000/order/checkout', form, {
+            const response = await axios.post('https://backend-ecommerce-theta-one.vercel.app/order/checkout', form, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `${localStorage.getItem('token')}`

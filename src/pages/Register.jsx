@@ -14,7 +14,7 @@ const Register = () => {
     try {
       setLoading(true);
 
-      const response = await fetch('http://localhost:5000/auth/register', {
+      const response = await fetch('https://backend-ecommerce-theta-one.vercel.app/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

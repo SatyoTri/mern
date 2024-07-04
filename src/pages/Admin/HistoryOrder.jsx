@@ -6,7 +6,7 @@ const HistoryOrder = () => {
   useEffect(() => {
     const fetchHistoryOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5000/order/history', {
+        const response = await fetch('https://backend-ecommerce-theta-one.vercel.app/order/history', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -42,12 +42,12 @@ const HistoryOrder = () => {
                 <p><strong>Proof of Transfer:</strong></p>
                 {order.proofOfTransfer && (
                   <a
-                    href={`http://localhost:5000/uploads/${order.proofOfTransfer}`}
+                    href={order.proofOfTransfer}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${order.proofOfTransfer}`}
+                      src={order.proofOfTransfer}
                       alt="Proof of Transfer"
                       className="img-thumbnail"
                       style={{ width: '150px' }}
