@@ -1,3 +1,4 @@
+// index.js (or your main file)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
@@ -7,14 +8,15 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register, Checkout, PageNotFound } from "./pages";
 import AdminLayout from './components/admin/AdminLayout';
-import ManageProducts from "./pages/Admin/ManageProduct"
+import ManageProducts from "./pages/Admin/ManageProduct";
 import ManageOrders from './pages/Admin/ManageOrder';
 import UserOrder from './pages/UserOrder';
 import HistoryOrder from './pages/Admin/HistoryOrder';
 import AdminDashboard from './components/admin/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import Order from './pages/User/Order';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 
 root.render(
   <BrowserRouter>
@@ -31,10 +33,14 @@ root.render(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/product/*" element={<PageNotFound />} />
-        <Route path="/order" element={<UserOrder/>}/>
+        <Route path="/Dashboard" element={<Order />} />
 
-        <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<AdminDashboard />} />
           <Route path="products" element={<ManageProducts />} />
           <Route path="orders" element={<ManageOrders />} />
         </Route>

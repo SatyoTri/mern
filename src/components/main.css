@@ -1,3 +1,23 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  background-color: lightgray;
+  margin-top: auto;
+}
 .navbar .nav-link {
   position: relative;
   transition: color 0.3s ease;
@@ -113,6 +133,3 @@ background: linear-gradient(4deg, rgba(233,237,237,1) 39%, rgba(124,220,235,1) 9
   font-size: 0.9rem;
   text-align: center;
 }
-
-
-

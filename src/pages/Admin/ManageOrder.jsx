@@ -25,12 +25,6 @@ const ManageOrder = () => {
     fetchCheckouts();
   }, []);
 
-  const handleStatusChange = (id, newStatus) => {
-    setCheckouts(checkouts.map(checkout =>
-      checkout._id === id ? { ...checkout, status: newStatus } : checkout
-    ));
-  };
-
   const handleComplete = async (id) => {
     try {
       const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/order/complete/${id}`, {
@@ -52,6 +46,30 @@ const ManageOrder = () => {
     } catch (error) {
       console.error('Error marking checkout as completed:', error);
     }   
+  };
+
+  const handleShippingStatusUpdate = async (id, shippingStatus) => {
+    try {
+      const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/order/shipping-status/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shippingStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update shipping status');
+      }
+
+      const data = await response.json();
+      setCheckouts(checkouts.map(checkout =>
+        checkout._id === id ? { ...checkout, shippingStatus } : checkout
+      ));
+      alert('Shipping status updated:', data.checkout);
+    } catch (error) {
+      console.error('Error updating shipping status:', error);
+    }
   };
 
   return (
@@ -83,6 +101,7 @@ const ManageOrder = () => {
                     />
                   </a>
                 )}
+                <p><strong>Shipping Status:</strong> {checkout.shippingStatus}</p>
               </div>
               <div className="col-md-6">
                 <ul className="list-group mb-3">
@@ -94,26 +113,26 @@ const ManageOrder = () => {
                     </li>
                   ))}
                 </ul>
-                <div className="form-group">
-                  <label htmlFor={`status-${checkout._id}`}>Status:</label>
-                  <select
-                    id={`status-${checkout._id}`}
-                    value={checkout.status || ''}
-                    onChange={(e) => handleStatusChange(checkout._id, e.target.value)}
-                    className="form-control"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                  </select>
-                </div>
                 <button
                   onClick={() => handleComplete(checkout._id)}
                   className="btn btn-success mt-3 w-100"
                 >
                   Complete
                 </button>
+                <div className="mt-3">
+                  <label htmlFor="shippingStatus">Update Shipping Status:</label>
+                  <select
+                    id="shippingStatus"
+                    className="form-control"
+                    onChange={(e) => handleShippingStatusUpdate(checkout._id, e.target.value)}
+                    value={checkout.shippingStatus}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="On Process">On Process</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>

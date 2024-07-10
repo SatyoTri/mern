@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import './main.css'
@@ -10,8 +9,8 @@ const Products = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [cart, setCart] = useState([]);
-  const token = localStorage.getItem('token');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   let componentMounted = true;
 
   useEffect(() => {
@@ -42,7 +41,14 @@ const Products = () => {
     const updatedList = data.filter((item) => item.category === cat);
     setFilter(updatedList);
   };
-  
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filter.slice(indexOfFirstItem, indexOfLastItem);
 
   const Loading = () => {
     return (
@@ -58,13 +64,12 @@ const Products = () => {
       </div>
     );
   };
-  
 
- const ShowProducts = () => {
-  return (
+  const ShowProducts = () => {
+     return (
     <div className="row">
-      {filter.map((product) => (
-        <div key={product._id} className="col-md-4 col-sm-6 mb-4">
+      {currentItems.map((product) => (
+        <div key={product._id} className="col-md-4 col-sm-6 col-xs-6 mb-4">
           <div className="card h-100">
             <Link to={"/product/" + product._id}>
               <img
@@ -83,7 +88,30 @@ const Products = () => {
       ))}
     </div>
   );
-};
+
+  };
+
+  const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          {pageNumbers.map(number => (
+            <li key={number} className="page-item">
+              <button onClick={() => paginate(number)} className="page-link">
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <div className="container my-3 py-3">
@@ -99,13 +127,14 @@ const Products = () => {
             All
           </button>
           <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("man")}>
-            Men's Clothing
+            Men's Hoodie
           </button>
           <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("women")}>
-            Women's Clothing
+            Women's Hoodie
           </button>
         </div>
         {loading ? <Loading /> : <ShowProducts />}
+        <Pagination itemsPerPage={itemsPerPage} totalItems={filter.length} paginate={handlePageChange} />
       </div>
     </div>
   );

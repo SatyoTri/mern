@@ -8,19 +8,9 @@ const AboutPage = () => {
         <h1 className="text-center">About Us</h1>
         <hr />
         <p className="lead text-center">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-          facere doloremque veritatis odit similique sequi. Odit amet fuga nam
-          quam quasi facilis sed doloremque saepe sint perspiciatis explicabo
-          totam vero quas provident ipsam, veritatis nostrum velit quos
-          recusandae est mollitia esse fugit dolore laudantium. Ex vel explicabo
-          earum unde eligendi autem praesentium, doloremque distinctio nesciunt
-          porro tempore quis eaque labore voluptatibus ea necessitatibus
-          exercitationem tempora molestias. Ad consequuntur veniam sequi ullam
-          tempore vel tenetur soluta dolore sunt maxime aliquam corporis est,
-          quo saepe dolorem optio minus sint nemo totam dolorum! Reprehenderit
-          delectus expedita a alias nam recusandae illo debitis repellat libero,
-          quasi explicabo molestiae saepe, dolorem tempore itaque eveniet quam
-          dignissimos blanditiis excepturi harum numquam vel nihil? Ipsum
+        Coozy Hood didirikan pada tahun 2022 oleh seorang mahasiswa dari Universitas Semarang. Dengan tujuan utama untuk menambah penghasilan selama masa perkuliahan, pendiri Coozy Hood memulai bisnis ini dengan semangat dan dedikasi tinggi. <br /><br />
+Berawal dari ketertarikan pada dunia fashion dan melihat peluang pasar untuk produk hoodie yang nyaman dan trendi, Coozy Hood menawarkan berbagai desain unik yang dapat digunakan dalam berbagai kesempatan. Mengusung konsep "cozy and stylish", produk-produk dari Coozy Hood dirancang untuk memberikan kenyamanan maksimal tanpa mengesampingkan gaya.
+
         </p>
 
         <h2 className="text-center py-4">Our Products</h2>
