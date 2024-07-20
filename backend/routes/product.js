@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/product');
 const upload = require('../middleware/multer');
 const cloudinary = require('../middleware/cloudinary');
+
 // Create a new product with an image
 router.post('/', upload.single('image'), async (req, res) => {
     const { title, price, description, category, sizes } = req.body;

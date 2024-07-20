@@ -26,15 +26,16 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Invalid credentials');
+        const errorResponse = await response.text();
+        throw new Error(errorResponse || 'Invalid credentials');
       }
 
-      const { token } = await response.json();
+      const { token, user } = await response.json();
       console.log('Login successful:', token);
 
       // Simpan token di local storage
       localStorage.setItem('token', token);
-
+      localStorage.setItem('user', JSON.stringify(user));
       // Kirim aksi untuk menyimpan data pengguna di Redux state
       dispatch(loginUser(token));
 
@@ -50,7 +51,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Login error:', error.message);
-      setError('Failed to login');
+      setError(error.message === 'Invalid email or password.' ? 'Invalid email or password' : 'Failed to login');
     } finally {
       setLoading(false);
     }
@@ -115,7 +116,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer  />
+      <Footer />
     </>
   );
 };

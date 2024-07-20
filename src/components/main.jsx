@@ -7,9 +7,9 @@ const Home = () => {
     <div className="hero-section container-fluid ">
       <div className="row align-items-center justify-content-center">
         <div className="col-md-6 text-center text-md-left">
-          <h1 className="title">New Season Arrivals</h1>
+          <h1 className="title">Stylish Hoodies Collection</h1>
           <p className="description">
-            Discover the latest trends with our new arrivals. Perfect for any occasion.
+           Discover the latest in hoodie fashion with our trendsetting collection. Ideal for casual and chic looks.
           </p>
            <Link to="/product" className="btn btn-primary">
             Shop Now
@@ -18,7 +18,7 @@ const Home = () => {
         <div className="col-md-6 text-center">
           <img
             className="img-fluid"
-            src="./assets/hero_image.png"
+            src="./assets/home.png"
             alt="New Season"
           />
         </div>

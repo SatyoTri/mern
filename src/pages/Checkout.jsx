@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +17,18 @@ const CheckoutForm = () => {
         proofOfTransfer: null
     });
     const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            setFormData({
+                recipientName: user.username,
+                address: user.address,
+                whatsappNumber: user.whatsapp,
+                proofOfTransfer: null
+            });
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,7 +62,7 @@ const CheckoutForm = () => {
                 }
             });
             setMessage(response.data.message);
-            navigate('/Dashboard'); // Menavigasi ke halaman /order setelah berhasil checkout
+            navigate('/dashboard');
         } catch (error) {
             console.error('Error during checkout:', error);
             setMessage('Checkout failed');
@@ -70,7 +82,7 @@ const CheckoutForm = () => {
                 <div className="text-center">
                     <h4>Owner's QR Code and Account Number</h4>
                     {ownerInfo.qrCodeUrl && <img src={ownerInfo.qrCodeUrl} alt="QR Code" className="img-fluid mb-3" style={{ maxWidth: '200px' }} />}
-                    <p>Number: {ownerInfo.accountNumber}</p>
+                    <p> Accout Number: {ownerInfo.accountNumber} (BCA)</p>
                     <h4>Total Amount: Rp. {totalAmount.toLocaleString()}</h4>
                     <p>Please transfer according to the amount above</p>
                 </div>

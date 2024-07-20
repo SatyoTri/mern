@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AdminDashboard = () => {
   const [historyOrders, setHistoryOrders] = useState([]);
@@ -25,13 +25,39 @@ const AdminDashboard = () => {
     fetchHistoryOrders();
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/order/history/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete order');
+      }
+
+      setHistoryOrders(historyOrders.filter(order => order._id !== id));
+      alert('Order deleted successfully');
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Order History</h2>
       {historyOrders.map((order) => (
         <div key={order._id} className="card mb-3 shadow-sm">
-          <div className="card-header bg-secondary text-white">
+          <div className="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
             <h5 className="mb-0">Order #{order._id}</h5>
+            <button
+              onClick={() => handleDelete(order._id)}
+              className="btn btn-danger btn-sm"
+            >
+              Delete
+            </button>
           </div>
           <div className="card-body">
             <div className="row">
@@ -62,7 +88,7 @@ const AdminDashboard = () => {
                       <p><strong>Product:</strong> {item.title}</p>
                       <p><strong>Quantity:</strong> {item.quantity}</p>
                       <p><strong>Size:</strong> {item.size}</p>
-                        <hr></hr>
+                      <hr />
                     </li>
                   ))}
                 </ul>

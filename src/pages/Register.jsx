@@ -8,6 +8,8 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [whatsapp, setWhatsappNumber] = useState('');
   const [loading, setLoading] = useState(false); // To manage loading state
   const [showToast, setShowToast] = useState(false); // To manage toast visibility
   const navigate = useNavigate(); // Hook to navigate programmatically
@@ -27,6 +29,8 @@ const Register = () => {
           username,
           email,
           password,
+          address,
+          whatsapp
         }),
       });
 
@@ -95,6 +99,30 @@ const Register = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form my-3">
+                <label htmlFor="Address">Address</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="Address"
+                  placeholder="Enter Your Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form my-3">
+                <label htmlFor="WhatsappNumber">Whatsapp Number</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="WhatsappNumber"
+                  placeholder="Enter Your Whatsapp Number"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsappNumber(e.target.value)}
                   required
                 />
               </div>

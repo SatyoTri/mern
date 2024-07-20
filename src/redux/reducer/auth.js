@@ -11,12 +11,26 @@ const parseJwt = (token) => {
 const LOGIN_USER = 'LOGIN_USER';
 const LOGOUT_USER = 'LOGOUT_USER';
 
-// Initial State - modifikasi untuk memuat token dari localStorage jika ada
-const initialState = {
-  isLoggedIn: !!localStorage.getItem('token'), // Cek apakah token ada di localStorage
-  user: null,
-  isAdmin: false,
-};
+// Ambil token dari localStorage
+const token = localStorage.getItem('token');
+let initialState;
+
+// Jika ada token, decode dan set initial state
+if (token) {
+  const decodedToken = parseJwt(token);
+  initialState = {
+    isLoggedIn: true,
+    user: token,
+    isAdmin: decodedToken.role === 1,
+  };
+} else {
+  // Jika tidak ada token, set initial state default
+  initialState = {
+    isLoggedIn: false,
+    user: null,
+    isAdmin: false,
+  };
+}
 
 // Reducer Function
 const authReducer = (state = initialState, action) => {
@@ -49,7 +63,6 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-
 // Action Creators
 export const loginUser = (token) => ({
   type: LOGIN_USER,
@@ -58,10 +71,10 @@ export const loginUser = (token) => ({
 
 export const logoutUser = () => ({
   type: LOGOUT_USER,
-  
 });
+
 export const getToken = () => {
-  return localStorage.getItem('token'); 
+  return localStorage.getItem('token');
 };
 
 export default authReducer;

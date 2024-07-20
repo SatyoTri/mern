@@ -10,8 +10,6 @@ import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register,
 import AdminLayout from './components/admin/AdminLayout';
 import ManageProducts from "./pages/Admin/ManageProduct";
 import ManageOrders from './pages/Admin/ManageOrder';
-import UserOrder from './pages/UserOrder';
-import HistoryOrder from './pages/Admin/HistoryOrder';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Order from './pages/User/Order';

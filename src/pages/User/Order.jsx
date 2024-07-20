@@ -144,7 +144,7 @@ const Order = () => {
                         <button
                           onClick={() => handleComplete(order._id)}
                           className="btn btn-success mt-3 w-100"
-                          disabled={order.shippingStatus === 'Pending' || order.shippingStatus === 'On Process' || order.shippingStatus === 'Shipped'}
+                          disabled={order.shippingStatus === 'Pending' || order.shippingStatus === 'On Process' || order.shippingStatus === 'Shipped' }
                         >
                           Complete
                         </button>
@@ -152,7 +152,7 @@ const Order = () => {
 
                       <p className="mt-4 pt-2 mb-0">
                         Need any help?{" "}
-                        <a href="#!" style={{ color: "#17a2b8" }}>
+                        <a href="/contact" style={{ color: "#17a2b8" }}>
                           Contact us
                         </a>
                       </p>

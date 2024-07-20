@@ -72,21 +72,50 @@ const ManageOrder = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`https://backend-ecommerce-theta-one.vercel.app/order/checkouts/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete checkout');
+      }
+
+      setCheckouts(checkouts.filter(checkout => checkout._id !== id));
+      alert('Checkout deleted successfully');
+    } catch (error) {
+      console.error('Error deleting checkout:', error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Manage Order</h2>
-      {checkouts.map((checkout) => (
-        <div key={checkout._id} className="card mb-3 shadow-sm">
-          <div className="card-header bg-primary text-white">
-            <h5 className="mb-0">Order #{checkout._id}</h5>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-md-6">
-                <p><strong>Recipient Name:</strong> {checkout.recipientName}</p>
-                <p><strong>Address:</strong> {checkout.address}</p>
-                <p><strong>WhatsApp Number:</strong> {checkout.whatsappNumber}</p>
-                <p><strong>Proof of Transfer:</strong></p>
+      <table className="table table-striped table-bordered">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Recipient Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">WhatsApp Number</th>
+            <th scope="col">Proof of Transfer</th>
+            <th scope="col">Shipping Status</th>
+            <th scope="col">Items</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {checkouts.map((checkout) => (
+            <tr key={checkout._id}>
+              <td>{checkout._id}</td>
+              <td>{checkout.recipientName}</td>
+              <td>{checkout.address}</td>
+              <td>{checkout.whatsappNumber}</td>
+              <td>
                 {checkout.proofOfTransfer && (
                   <a
                     href={checkout.proofOfTransfer}
@@ -101,10 +130,10 @@ const ManageOrder = () => {
                     />
                   </a>
                 )}
-                <p><strong>Shipping Status:</strong> {checkout.shippingStatus}</p>
-              </div>
-              <div className="col-md-6">
-                <ul className="list-group mb-3">
+              </td>
+              <td>{checkout.shippingStatus}</td>
+              <td>
+                <ul className="list-group">
                   {checkout.items.map((item) => (
                     <li key={item._id} className="list-group-item">
                       <p><strong>Product:</strong> {item.title}</p>
@@ -113,9 +142,11 @@ const ManageOrder = () => {
                     </li>
                   ))}
                 </ul>
+              </td>
+              <td>
                 <button
                   onClick={() => handleComplete(checkout._id)}
-                  className="btn btn-success mt-3 w-100"
+                  className="btn btn-success btn-sm"
                 >
                   Complete
                 </button>
@@ -123,7 +154,7 @@ const ManageOrder = () => {
                   <label htmlFor="shippingStatus">Update Shipping Status:</label>
                   <select
                     id="shippingStatus"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     onChange={(e) => handleShippingStatusUpdate(checkout._id, e.target.value)}
                     value={checkout.shippingStatus}
                   >
@@ -133,11 +164,17 @@ const ManageOrder = () => {
                     <option value="Delivered">Delivered</option>
                   </select>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
+                <button
+                  onClick={() => handleDelete(checkout._id)}
+                  className="btn btn-danger btn-sm mt-3"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
